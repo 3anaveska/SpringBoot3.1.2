@@ -34,9 +34,10 @@
     <button style="background: mintcream" type="submit">Изменить</button>
   </form>
   <br>
-  <form th:method="DELETE" th:action="@{/admin/users/{id}/delete(id=${user.id})}">
+  <form th:method="post" th:action="@{/admin/users/{id}/delete(id=${user.id})}">
     <input type="hidden" name="id" th:value="${user.id}">
-    <button style="background: moccasin" type="submit" value="Delete">Удалить</button>
+    <input type="hidden" name="action" value="delete"/>
+    <button style="background: moccasin" type="submit">Удалить</button>
   </form>
   <br/>
   <form th:action="@{/admin}">

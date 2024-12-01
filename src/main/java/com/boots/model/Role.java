@@ -1,64 +1,65 @@
-package com.boots.entity;
+package com.boots.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    @Transient
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    @Column(name = "name", unique = true, length = 100)
+    private String role;
 
     public Role() {
-    }
 
+    }
     public Role(Long id) {
+
         this.id = id;
     }
 
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public Role(String role) {
+
+        this.role = role;
     }
 
     public Long getId() {
+
         return id;
     }
 
     public void setId(Long id) {
+
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setRole(String role) {
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+        this.role = role;
     }
 
     @Override
     public String getAuthority() {
-        return getName();
+
+        return getRole();
+    }
+
+    @Override
+    public String toString() {
+
+        return role;
+
     }
 }

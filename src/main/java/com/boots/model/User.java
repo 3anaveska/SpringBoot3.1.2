@@ -1,103 +1,157 @@
-package com.boots.entity;
+package com.boots.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Set;
-
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
-@Table(name = "t_user")
+@Table(name = "users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    @Size(min=2, message = "Не меньше 5 знаков")
-    private String username;
-    @Size(min=2, message = "Не меньше 5 знаков")
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name="age")
+    private int age;
+
+    @Column(name = "email", unique = true, length = 100)
+    private String email;
+
+    @Column(name = "password")
     private String password;
-    @Transient
-    private String passwordConfirm;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public Long getId() {
-        return id;
+    public User(String name, String lastName, int age, String email, String password) {
+        this.name = name;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.password = password;
     }
 
+    public long getId() {
+
+        return id;
+    }
     public void setId(Long id) {
+
         this.id = id;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
+    public String getLastName() {
+
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+
+        return age;
+    }
+    public void setAge(int age) {
+
+        this.age = age;
+    }
+
+    public String getEmail() {
+
+        return email;
+    }
+
+    public void setEmail(String email) {
+
+        this.email = email;
+    }
+
+    @Override
+    public String getPassword() {
+
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+
+        return getEmail();
+    }
+
+    public void setPassword(String password) {
+
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+
+        this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return getRoles();
     }
 
     @Override
     public boolean isAccountNonExpired() {
+
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+
         return true;
     }
 
     @Override
     public boolean isEnabled() {
+
         return true;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public UserDetails fromUser(User user) {
+        return new org.springframework.security.core.userdetails.User
+                (user.getEmail(), user.getPassword(), user.getRoles());
     }
 }
