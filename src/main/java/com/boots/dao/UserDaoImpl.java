@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -49,7 +50,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void removeUserById(Long id) {
-        entityManager.remove(entityManager.find(User.class, id));
+
+        entityManager.remove(entityManager.getReference(User.class, id));
     }
 
     @Override

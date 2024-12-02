@@ -47,14 +47,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void updateUser(User user) {
 
         userDao.updateUser(user);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void removeUserById(Long id) {
         userDao.removeUserById(id);
     }

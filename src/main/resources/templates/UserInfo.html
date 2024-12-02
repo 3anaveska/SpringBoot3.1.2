@@ -13,6 +13,7 @@
     <th>ID</th>
     <th>Имя</th>
     <th>Фамилия</th>
+    <th>Возраст</th>
     <th>Электронная почта</th>
   </tr>
 
@@ -22,6 +23,7 @@
     <td th:utext="${user.getId()}">id</td>
     <td th:utext="${user.getName()}">Имя</td>
     <td th:utext="${user.getLastName()}">Фамилия</td>
+    <td th:utext="${user.getAge()}">Возраст</td>
     <td th:utext="${user.getEmail()}">Электронная почта</td>
   </tr>
   </tbody>
